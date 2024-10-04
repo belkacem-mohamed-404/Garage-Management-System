@@ -1,0 +1,53 @@
+version: "3"
+services:
+  customer-database:
+    image: mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: customer
+      MYSQL_USER: customer
+      MYSQL_PASSWORD: password
+    ports:
+      - 3307:3306
+    volumes:
+      - customer-database:/var/lib/mysql
+    networks:
+      - pitstopNetwork
+  vehicle-database:
+    image: mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: vehicle
+      MYSQL_USER: vehicle
+      MYSQL_PASSWORD: password
+    ports:
+      - 3308:3306
+    volumes:
+      - vehicle-database:/var/lib/mysql
+    networks:
+      - pitstopNetwork
+  workshop-database:
+    image: mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: workshop
+      MYSQL_USER: workshop
+      MYSQL_PASSWORD: password
+    ports:
+      - 3309:3306
+    volumes:
+      - workshop-database:/var/lib/mysql
+    networks:
+      - pitstopNetwork
+
+volumes:
+  customer-database:
+  vehicle-database:
+  workshop-database:
+
+networks:
+  pitstopNetwork:
+    driver: bridge
