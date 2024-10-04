@@ -43,10 +43,26 @@ services:
     networks:
       - pitstopNetwork
 
+  rabbitmq:
+    image: rabbitmq:management
+    restart: always
+    environment:
+      - RABBITMQ_DEFAULT_USER=admin
+      - RABBITMQ_DEFAULT_PASS=password
+    ports:
+      - 5672:5672
+      - 15672:15672
+    networks:
+      - pitstopNetwork
+    volumes:
+      - rabbitmq-data:/var/lib/rabbitmq
+      - rabbitmq-data:/var/log/rabbitmq
+
 volumes:
   customer-database:
   vehicle-database:
   workshop-database:
+  rabbitmq-data:
 
 networks:
   pitstopNetwork:
