@@ -4,7 +4,8 @@
   "description": "Garage management system microservices using docker, nodejs and rabbitmq",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "install": "for d in ./* ; do (cd \"$d\" && npm install && npm audit fix --force); done"
   },
   "author": "MSALEK Mouad",
   "license": "ISC",
