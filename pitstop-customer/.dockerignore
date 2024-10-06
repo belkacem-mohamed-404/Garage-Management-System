@@ -1,0 +1,31 @@
+# Ignore node_modules
+node_modules
+npm-debug.log
+
+# Ignore the .env file
+.env
+
+# Ignore the build directory (if applicable)
+build
+
+# Ignore log files
+*.log
+
+# Ignore the Dockerfile itself (if needed for security)
+Dockerfile
+
+# Ignore Docker Compose files if you want a clean image
+docker-compose.yml
+
+# Ignore any test files
+tests
+
+# Ignore local configuration files
+*.local
+
+# Ignore IDE and editor files
+.idea
+.vscode
+*.swp
+.DS_Store
+
