@@ -1,5 +1,52 @@
 version: "3"
 services:
+  pitstop-express-gateway:
+    image: pitstop-express-gateway
+    restart: always
+    ports:
+      - 8080:8080
+    networks:
+      - pitstopNetwork
+  pitstop-customer-service:
+    image: pitstop-customer
+    restart: always
+    ports: 
+      - 3001:3000
+    networks:
+      - pitstopNetwork
+    environment:
+      DB_USER: customer
+      DB_PASSWORD: password
+      DB_NAME: customer
+      DB_HOST: customer-database
+
+  pitstop-vehicle-service:
+    image: pitstop-vehicle
+    restart: always
+    ports:
+      - 3002:3000
+    networks:
+      - pitstopNetwork
+    environment:
+      DB_USER: vehicle
+      DB_PASSWORD: password
+      DB_NAME: vehicle
+      DB_HOST: vehicle-database
+
+  pitstop-workshop-service:
+    image: pitstop-workshop-planning
+    restart: always
+    ports:
+      - 3003:3000
+    networks:
+      - pitstopNetwork
+    environment:
+      DB_USER: workshop
+      DB_PASSWORD: password
+      DB_NAME: workshop
+      DB_HOST: workshop-database
+
+
   customer-database:
     image: mysql
     restart: always
