@@ -1,17 +1,29 @@
-version: "3"
 services:
+
+  # Weapp container 
+  piststop-webapp:
+    image: pitstop-webapp
+    container_name: piststop-webapp
+    restart: always
+    networks:
+      - pitstopNetwork
+
+
+  # Gateway container 
   pitstop-express-gateway:
     image: pitstop-express-gateway
+    container_name: pitstop-express-gateway
     restart: always
     ports:
       - 8080:8080
     networks:
       - pitstopNetwork
+
+  # Pitsotp-Customer contaier 
   pitstop-customer-service:
     image: pitstop-customer
+    container_name: pitstop-customer-service
     restart: always
-    ports: 
-      - 3001:3000
     networks:
       - pitstopNetwork
     environment:
@@ -19,12 +31,35 @@ services:
       DB_PASSWORD: password
       DB_NAME: customer
       DB_HOST: customer-database
+      MESSAGE_BUS_USERNAME: admin
+      MESSAGE_BUS_PASSWORD: password
+      MESSAGE_BUS: rabbitmq  
+      MESSAGE_BUS_TIMEOUT: 5000
+      PORT: 3001
+  
+  # Pitstop-Customer Database       
+  customer-database:
+    image: mysql
+    container_name: customer-database
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: customer
+      MYSQL_USER: customer
+      MYSQL_PASSWORD: password
+    volumes:
+      - customer-database:/var/lib/mysql
+    networks:
+      - pitstopNetwork
+        
 
+
+
+  # Pitstop-Vehicle container 
   pitstop-vehicle-service:
     image: pitstop-vehicle
+    container_name: pitstop-vehicle-service
     restart: always
-    ports:
-      - 3002:3000
     networks:
       - pitstopNetwork
     environment:
@@ -32,12 +67,34 @@ services:
       DB_PASSWORD: password
       DB_NAME: vehicle
       DB_HOST: vehicle-database
+      MESSAGE_BUS_USERNAME: admin
+      MESSAGE_BUS_PASSWORD: password
+      MESSAGE_BUS: rabbitmq
+      MESSAGE_BUS_TIMEOUT: 500
+      PORT: 3002
 
+  # Pitstop-Vehicle Database
+  vehicle-database:
+    image: mysql
+    container_name: vehicle-database
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: vehicle
+      MYSQL_USER: vehicle
+      MYSQL_PASSWORD: password
+    volumes:
+      - vehicle-database:/var/lib/mysql
+    networks:
+      - pitstopNetwork
+
+
+
+  # Pistop-Workshop container 
   pitstop-workshop-service:
     image: pitstop-workshop-planning
+    container_name: pitstop-workshop-service
     restart: always
-    ports:
-      - 3003:3000
     networks:
       - pitstopNetwork
     environment:
@@ -45,60 +102,35 @@ services:
       DB_PASSWORD: password
       DB_NAME: workshop
       DB_HOST: workshop-database
+      MESSAGE_BUS_USERNAME: admin
+      MESSAGE_BUS_PASSWORD: password
+      MESSAGE_BUS: rabbitmq
+      MESSAGE_BUS_TIMEOUT: 5000
+      PORT: 3003
 
-
-  customer-database:
-    image: mysql
-    restart: always
-    environment:
-      MYSQL_ROOT_PASSWORD: password
-      MYSQL_DATABASE: customer
-      MYSQL_USER: customer
-      MYSQL_PASSWORD: password
-    ports:
-      - 3307:3306
-    volumes:
-      - customer-database:/var/lib/mysql
-    networks:
-      - pitstopNetwork
-  vehicle-database:
-    image: mysql
-    restart: always
-    environment:
-      MYSQL_ROOT_PASSWORD: password
-      MYSQL_DATABASE: vehicle
-      MYSQL_USER: vehicle
-      MYSQL_PASSWORD: password
-    ports:
-      - 3308:3306
-    volumes:
-      - vehicle-database:/var/lib/mysql
-    networks:
-      - pitstopNetwork
+  # Pitstop-Workshop Database      
   workshop-database:
     image: mysql
+    container_name: workshop-databas
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: password
       MYSQL_DATABASE: workshop
       MYSQL_USER: workshop
       MYSQL_PASSWORD: password
-    ports:
-      - 3309:3306
     volumes:
       - workshop-database:/var/lib/mysql
     networks:
       - pitstopNetwork
 
+  # RabbitMQ container
   rabbitmq:
     image: rabbitmq:management
+    container_name: rabbitmq
     restart: always
     environment:
       - RABBITMQ_DEFAULT_USER=admin
       - RABBITMQ_DEFAULT_PASS=password
-    ports:
-      - 5672:5672
-      - 15672:15672
     networks:
       - pitstopNetwork
     volumes:
