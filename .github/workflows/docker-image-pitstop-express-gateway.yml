@@ -1,4 +1,4 @@
-name: Build Docker Images for Changed Services
+name: Build Docker Images for pitstop-express-gateway service
 on:
   push:
     branches:

@@ -1,4 +1,4 @@
-name: Create pitstop-vehicle docker image
+name: Build Docker Images for pitstop-vehicle service
 on:
   push:
     branches:

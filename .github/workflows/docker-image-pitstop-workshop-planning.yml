@@ -1,4 +1,4 @@
-name: Build Docker Images for Changed Services
+name: Build Docker Images for pitstop-workshop-planning service
 on:
   push:
     branches:
