@@ -1,0 +1,23 @@
+name: Build Docker Images for Changed Services
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'pitstop-customer/**'
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - name: Build pitstop-customer Docker image
+      run: cd pitstop-customer && docker build -t pitstop-customer:latest .
+    - name: Login to Docker Hub
+      env:
+        DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+        DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+      run: echo "${DOCKER_PASSWORD}" | docker login -u "${DOCKER_USERNAME}" --password-stdin
+
+    - name: Push Docker image to Docker Hub
+      run: docker tag pitstop-customer:latest simohassane/pitstop-customer:latest && docker push simohassane/pitstop-customer:latest
+    

@@ -1,0 +1,22 @@
+name: Build Docker Images for Changed Services
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'pitstop-workshop-planning/**'
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - name: Build pitstop-workshop-planning Docker image
+      run: cd pitstop-workshop-planning && docker build -t pitstop-workshop-planning:latest .
+    - name: Login to Docker Hub
+      env:
+        DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+        DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+      run: echo "${DOCKER_PASSWORD}" | docker login -u "${DOCKER_USERNAME}" --password-stdin
+
+    - name: Push Docker image to Docker Hub
+      run: docker tag pitstop-workshop-planning:latest simohassane/pitstop-workshop-planning:latest && docker push simohassane/pitstop-workshop-planning:latest

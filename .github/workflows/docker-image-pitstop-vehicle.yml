@@ -1,0 +1,24 @@
+name: Create pitstop-vehicle docker image
+on:
+  push:
+    branches:
+      - "main"
+    paths:
+      - "pitstop-vehicle/**"
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build pitstop-vehicle Image
+        run: cd pitstop-vehicle && docker build -t pitstop-vehicle:latest .
+      - name: Login to Docker Hub
+        env:
+          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+        run: echo "${DOCKER_PASSWORD}" | docker login -u "${DOCKER_USERNAME}" --password-stdin
+      - name: Push Docker image to Docker Hub
+        run: docker tag pitstop-vehicle:latest simohassane/pitstop-vehicle:latest && docker push simohassane/pitstop-vehicle:latest
+
+
+
