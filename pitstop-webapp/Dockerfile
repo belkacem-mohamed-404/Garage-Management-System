@@ -1,6 +1,6 @@
 
 # Build stage
-FROM node:lts-alpine as build
+FROM node:22.15.1-alpine3.21 as build
 
 ## Metadata of this container
 LABEL maintainer="Mohamed Belkacem mohamed.belkacem4004@gmail.com"
@@ -15,7 +15,7 @@ COPY . .
 RUN npm run build
 
 # Deployment stage
-FROM node:lts-alpine as deployment
+FROM node:22.15.1-alpine3.21 as deployment
 RUN apk add --no-cach curl
 RUN addgroup -S pitstop && adduser -S pitstop -G pitstop
 RUN npm install -g http-server
